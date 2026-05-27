@@ -273,10 +273,7 @@ def fs_classifier_cv_parallel(df, metric, modality):
     test_sets = []
     shap_values_sets = []
     odds_ratio_sets = []
-    auc_ci_sets = []
-    npv_ci_sets = []
     results_all = []
-    y_pred_sets = []
     
     worker = partial(fs_run_iteration_best_models, df = df, metric = metric, modality = modality)
     results = run_in_batches(worker, total_iterations = 1000, batch_size = 10)
