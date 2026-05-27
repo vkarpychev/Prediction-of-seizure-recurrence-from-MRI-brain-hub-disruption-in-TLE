@@ -369,31 +369,3 @@ for modality = {'SC','FC'}
            sprintf('%s_PC_FI_brain_hubs_fi_values_subcortical_map.png',char(modality))],'-dpng','-r1000')
     clear t_stats fi_values Ci_modality
 end
-
-%% ========================================================================
-% sensitivity analyses
-% patients
-GT_datadir = [maindir(1:id(end) - 6),'/Data','/ImageDatabase_BIDS','/Patients','/derivatives','/','TS/' atlas];
-GT_T = table2cell(readtable([GT_datadir,'/','GT_all_' atlas '_prediction_mean_MI_H.csv']));
-GT_wnc_T = table2cell(readtable([GT_datadir,'/','GT_all_' atlas '_prediction_mean_wnc_MI_H.csv']));
-GT_wopt_T = table2cell(readtable([GT_datadir,'/','GT_all_' atlas '_prediction_mean_wopt_MI_H.csv']));
-GT_data = cell2mat(GT_T(strcmp(GT_T(:,26),'PC'),27:end));
-GT_data_wnc = cell2mat(GT_wnc_T(strcmp(GT_wnc_T(:,26),'PC'),27:end));
-GT_data_wopt = cell2mat(GT_wopt_T(strcmp(GT_wopt_T(:,26),'PC'),27:end));
-
-PC_mean = mean(GT_data([1:180 188:367]),1);
-PC_mean_wnc = mean(GT_data_wnc([1:180 188:367]),1);
-PC_mean_wopt = mean(GT_data_wopt([1:180 188:367]),1);
-[p_wnc, d_wnc] = spin_test(PC_mean,PC_mean_wnc,...
-                           'surface_name','fsa5',...
-                           'parcellation_name','glasser_360',...
-                           'n_rot',5000,...
-                           'type','spearman');
-r_wnc = corr(PC_mean',PC_mean_wnc','Type','Spearman');
-
-[p_wopt, d_wopt] = spin_test(PC_mean,PC_mean_wopt,...
-                           'surface_name','fsa5',...
-                           'parcellation_name','glasser_360',...
-                           'n_rot',5000,...
-                           'type','spearman');
-r_wopt = corr(PC_mean',PC_mean_wopt','Type','Spearman');
